@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 import RPi.GPIO as GPIO
 from time import sleep
 
@@ -21,15 +21,18 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    return return_result(MODE)
+    callback = request.args.get('callback', '')
+    return return_result(MODE, callback)
 
 @app.route('/on')
 def turn_on():
-    return return_result(turn('on'))
+    callback = request.args.get('callback', '')
+    return return_result(turn('on'), callback)
 
 @app.route('/off')
 def turn_off():
-    return return_result(turn('off'))
+    callback = request.args.get('callback', '')
+    return return_result(turn('off'), callback)
 
 def turn(onoff):
     global MODE
@@ -43,8 +46,8 @@ def turn(onoff):
     p.stop()
     return MODE
 
-def return_result(str):
-    return 'callback({"status": "%s"});' % str
+def return_result(str, callback):
+    return '%s({"status": "%s"});' % (callback, str)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
