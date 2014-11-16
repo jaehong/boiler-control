@@ -35,7 +35,7 @@ def support_jsonp(f):
 @support_jsonp
 @app.route('/')
 def hello():
-    return jsonify({"status": MODE})
+    return flask.jsonify({"status": MODE})
 
 @support_jsonp
 @app.route('/on')
