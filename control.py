@@ -48,10 +48,9 @@ def turn(onoff):
 
 def return_result(str, callback):
     result = '{"status": "%s"}' % str
-    if callback is '':
-        return result
-    else:
-        return '%s(%s);' % (callback, result)
+    if callback is not '':
+        result = '%s(%s);' % (callback, result)
+    return result, 200, {'Content-Type': 'application/javascript; charset=utf-8'}
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
