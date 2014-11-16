@@ -20,6 +20,18 @@ p = GPIO.PWM(PIN_PWM, SPEED)
 
 app = Flask(__name__)
 
+def support_jsonp(f):
+    """Wraps JSONified output for JSONP"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        callback = request.args.get('callback', False)
+        if callback:
+            content = str(callback) + '(' + str(f(*args,**kwargs).data) + ')'
+            return current_app.response_class(content, mimetype='application/javascript')
+        else:
+            return f(*args, **kwargs)
+    return decorated_function
+
 @support_jsonp
 @app.route('/')
 def hello():
@@ -42,22 +54,10 @@ def turn(onoff):
     else:
         GPIO.output(PIN_SIG, GPIO.HIGH)
     MODE = onoff
-    p.start(SPEED)
+    #p.start(SPEED)
     sleep(DURATION)
-    p.stop()
+    #p.stop()
     return MODE
-
-def support_jsonp(f):
-    """Wraps JSONified output for JSONP"""
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        callback = request.args.get('callback', False)
-        if callback:
-            content = str(callback) + '(' + str(f(*args,**kwargs).data) + ')'
-            return current_app.response_class(content, mimetype='application/javascript')
-        else:
-            return f(*args, **kwargs)
-    return decorated_function
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
