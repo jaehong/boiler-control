@@ -1,8 +1,6 @@
-from flask import Flask, redirect, request, current_app
-import json
-from functools import wraps
-from time import sleep
+from flask import Flask
 import RPi.GPIO as GPIO
+from time import sleep
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -20,32 +18,18 @@ p = GPIO.PWM(PIN_PWM, SPEED)
 
 app = Flask(__name__)
 
-def support_jsonp(f):
-    """Wraps JSONified output for JSONP"""
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        callback = request.args.get('callback', False)
-        if callback:
-            content = str(callback) + '(' + str(f(*args,**kwargs).data) + ')'
-            return current_app.response_class(content, mimetype='application/javascript')
-        else:
-            return f(*args, **kwargs)
-    return decorated_function
 
-@support_jsonp
 @app.route('/')
 def hello():
-    return flask.jsonify({"status": MODE})
+    return return_result(MODE)
 
-@support_jsonp
 @app.route('/on')
 def turn_on():
-    return jsonify({"status": MODE})
+    return return_result(turn('on'))
 
-@support_jsonp
 @app.route('/off')
 def turn_off():
-    return jsonify({"status": MODE})
+    return return_result(turn('off'))
 
 def turn(onoff):
     global MODE
@@ -54,10 +38,13 @@ def turn(onoff):
     else:
         GPIO.output(PIN_SIG, GPIO.HIGH)
     MODE = onoff
-    #p.start(SPEED)
+    p.start(SPEED)
     sleep(DURATION)
-    #p.stop()
+    p.stop()
     return MODE
+
+def return_result(str):
+    return 'callback("status":"%s");' % str
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
