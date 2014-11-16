@@ -47,7 +47,11 @@ def turn(onoff):
     return MODE
 
 def return_result(str, callback):
-    return '%s({"status": "%s"});' % (callback, str)
+    result = '{"status": "%s"}' % str
+    if callback is '':
+        return result
+    else:
+        return '%s(%s);' % (callback, result)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
