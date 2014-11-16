@@ -1,6 +1,8 @@
-from flask import Flask
-import RPi.GPIO as GPIO
+from flask import Flask, redirect, request, current_app
+import json
+from functools import wraps
 from time import sleep
+import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -18,18 +20,20 @@ p = GPIO.PWM(PIN_PWM, SPEED)
 
 app = Flask(__name__)
 
-
+@support_jsonp
 @app.route('/')
 def hello():
-    return MODE
+    return jsonify({"status": MODE})
 
+@support_jsonp
 @app.route('/on')
 def turn_on():
-    return turn('on')
+    return jsonify({"status": MODE})
 
+@support_jsonp
 @app.route('/off')
 def turn_off():
-    return turn('off')
+    return jsonify({"status": MODE})
 
 def turn(onoff):
     global MODE
@@ -42,6 +46,18 @@ def turn(onoff):
     sleep(DURATION)
     p.stop()
     return MODE
+
+def support_jsonp(f):
+    """Wraps JSONified output for JSONP"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        callback = request.args.get('callback', False)
+        if callback:
+            content = str(callback) + '(' + str(f(*args,**kwargs).data) + ')'
+            return current_app.response_class(content, mimetype='application/javascript')
+        else:
+            return f(*args, **kwargs)
+    return decorated_function
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
