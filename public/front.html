@@ -2,18 +2,22 @@
 <html>
 <head>
 	<title>보일러 제어기</title>
+	<meta charset="utf-8">
 	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
-	<link href="./style.css" type="text/css" rel="stylesheet" />
+	<script type="text/javascript" src="./js/jquery-v1.10.2.min.js"></script>
+	<script type="text/javascript" src="./js/modernizr-custom-v2.7.1min.js"></script>
+	<script type="text/javascript" src="./js/formplate.min.js"></script>    
+    <link href="./css/formplate.css" rel="stylesheet" type="text/css">	
+	<link href="./css/style.css" type="text/css" rel="stylesheet" />    
 </head>
-<body>
+<body data-formplate-colour="aqua">
 	<div class="current">
 		지금은 <span class="status"></span> 상태입니다.
 	</div>
-	<div class="buttons">
-		<button class="">ON</button>
-		<button class="">OFF</button>
-	</div>
-	<script type="text/javascript" src="./zepto.min.js"></script>
-	<script type="text/javascript" src="./script.js"></script>
+	<div class="formplate checkbox">
+	    <input type="checkbox" class="toggler" id="status" name="toggler" value="toggler">
+	</div>	
+	<h3>Schedule</h3>
+	<script type="text/javascript" src="./js/script.js"></script>
 </body>
 </html>
