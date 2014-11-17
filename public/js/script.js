@@ -2,8 +2,16 @@
 
 	$('body').formplate();
 
+	var host = 'http://192.168.0.13:5000';
+	
 	function get_status(callback){
-		$.getJSON('http://192.168.0.13:5000/?callback=?', function(r){
+		$.getJSON(host + '/?callback=?', function(r){
+			callback(r);
+		});
+	}
+	
+	function get_schedule(callback){
+		$.getJSON(host + '/get_schedule?callback=?', function(r){
 			callback(r);
 		});
 	}
@@ -20,11 +28,16 @@
 
 	$('.checkbox .fp-toggler').on('click', function(e){
 		var s = e.currentTarget.classList.contains('checked') ? 'off' : 'on';
-		$.getJSON('http://192.168.0.13:5000/'+s+'?callback=?', function(r){
+		$.getJSON(host + '/'+s+'?callback=?', function(r){
 			$('.status').html(r.status);
 		});
 	});
 
+	$('#save').on('click', function(){
+		alert('구현중입니다.');
+		// validate, 정리 
+		// save
+	});
 
 	get_status(function(r){
 		console.log(r.status);
@@ -32,6 +45,8 @@
 		set_status(r.status);
 	});
 
+	get_schedule(function(r){
 
+	});
 
 })();

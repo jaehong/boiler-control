@@ -1,2 +1,18 @@
+body {background-color:#14242E;color:#eee;font-family:sans-serif;}
+.formplate .fp-toggler {background-color:#004C5B;}
 .current {text-align:center;margin:20px 0;}
-.checkbox {text-align:center;zoom:2;}
+.checkbox {text-align:center;zoom:3;}
+#schedule {width:60%;margin:0 auto;height:80px;position:relative;float:left;}
+.schedule_area {
+	position:relative;
+	height:110px;
+}
+.schedule_area button {
+	width:29%;
+	margin-left:10px;
+	height:103px;
+	border-radius:3px;
+	background-color:#004C5B;
+	border:none;
+	color:#fff;
+}
