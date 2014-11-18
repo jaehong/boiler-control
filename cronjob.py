@@ -7,6 +7,8 @@ sys.setdefaultencoding("utf-8")
 SCHEDULE_FILE = '%s/schedule.txt' % os.path.dirname(os.path.abspath(__file__))
 
 def main():
+  if not os.path.exists(SCHEDULE_FILE):
+    open(SCHEDULE_FILE, 'w').close()
   f = open(SCHEDULE_FILE, 'r')
   now = time.strftime('%H:%M')
 
