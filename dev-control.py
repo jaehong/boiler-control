@@ -1,27 +1,17 @@
+# -*- coding:utf-8 -*-
 from flask import Flask, request
-import RPi.GPIO as GPIO
 from time import sleep
 import os, sys
-
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
+app = Flask(__name__, static_folder='public', static_url_path='/public')
+app.debug = True
 
-PIN_PWM = 18
-PIN_SIG = 23
-DURATION = 1
-SPEED = 100
-MODE = 'off'
 SCHEDULE_FILE = '%s/schedule.txt' % os.path.dirname(os.path.abspath(__file__))
 
-GPIO.setup(PIN_SIG, GPIO.OUT)
-GPIO.setup(PIN_PWM, GPIO.OUT)
-
-p = GPIO.PWM(PIN_PWM, SPEED)
-
-app = Flask(__name__, static_folder='public', static_url_path='/public')
+DURATION = 1
+MODE = 'off'
 
 @app.route('/')
 def hello():
@@ -58,14 +48,8 @@ def set_schedule():
 
 def turn(onoff):
     global MODE
-    if onoff is 'off':
-        GPIO.output(PIN_SIG, GPIO.LOW)
-    else:
-        GPIO.output(PIN_SIG, GPIO.HIGH)
     MODE = onoff
-    p.start(SPEED)
     sleep(DURATION)
-    p.stop()
     return MODE
 
 def result(str, callback):
