@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 from flask import Flask, request
 import RPi.GPIO as GPIO
 from time import sleep
@@ -52,7 +53,7 @@ def get_schedule():
 def set_schedule():
     data = request.form['data']
     f = open(SCHEDULE_FILE, 'w')
-    f.write(data)
+    f.write(data.replace("\\n","\n"))
     f.close()
     return '분부대로 하겠나이다.'
 
