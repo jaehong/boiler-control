@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 # DHT11 로 온도를 기록한다.
 # schedule.txt를 읽어 실행해야 할때 실행 한다.
+# *   *  *   *   *     /usr/bin/python /root/boiler-control/cronjob.py  > /dev/null 2>&1
 import os, sys, time, subprocess
 reload(sys)
 sys.setdefaultencoding("utf-8")
