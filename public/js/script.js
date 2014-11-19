@@ -43,7 +43,8 @@
 			valid += /^[0-9]{2}:[0-9]{2}\s[켬|끔]/.test(item);
 			processed.push(item);
 		});
-		if(valid != s.length){
+
+		if(valid != s.length && s[0] != ''){
 			alert("표현을 확인하세요. \n01:00 켬\n같은 형식입니다.");
 			$('#schedule').focus();
 			return false;
